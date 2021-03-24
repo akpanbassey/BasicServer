@@ -13,6 +13,9 @@ const server = http.createServer(function (req, res) {
   res.setHeader("Content-Type", "text/html");
 
   try {
+    if(req.url === "/"){
+      req.url = "index.html"
+    }
     const pathToFile = path.join(__dirname, "public", req.url);
     console.log("pathToFile>>>", pathToFile);
 
@@ -23,11 +26,19 @@ const server = http.createServer(function (req, res) {
         return res.end("File Not Found");
       }
 
-      const content = fs.readFile(pathToFile);
-      // console.log(content);
-      const contentType = mime.lookup(pathToFile);
-      res.setHeader("Content-Type", contentType);
-      res.end(content);
+      fs.readFile(pathToFile, function (err, data) {
+        if (err) {
+          console.dir(err);
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          return res.end("File Not Found");
+        }
+        // console.log(content);
+        const contentType = mime.getType(pathToFile);
+        res.setHeader("Content-Type", contentType);
+        res.end(data);
+
+      });
+
 
       // if (stats.isFile()) {
       //   res.end(content);
@@ -40,7 +51,7 @@ const server = http.createServer(function (req, res) {
     res.writeHead(500, { "Content-Type": "text/plain" });
     res.end(err.toString());
   }
-  console.timeEnd("Respond Time");
+  console.timeEnd("Response Time");
   console.log(res.statusCode, req.method, req.url);
 
 });
