@@ -5,13 +5,15 @@
   "main": "index.js",
   "dependencies": {
     "good-status": "^1.0.0",
+    "mime": "^2.5.2",
     "underscore": "^1.12.1"
   },
   "devDependencies": {
     "mocha": "^8.3.2"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC"
